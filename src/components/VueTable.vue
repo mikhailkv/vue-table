@@ -4,7 +4,7 @@
         <div class="indeterminate"></div>
     </div>
     <div v-else>
-       
+        <input v-model="search" type="text">
         <table class="responsive-table">
             <thead>
                 <tr>
@@ -18,8 +18,8 @@
             <tbody v-for="row in sortRows" v-bind:key="row.id">
                 <tr>
                     <td v-for="key in fields" v-bind:key="key.id">
-                    <span>    {{ row[key] }}</span>
-                    <input type="text" value="">
+                        <span> {{ row[key] }}</span>
+                        <input type="text" value="">
                     </td>
                 </tr>
             </tbody>

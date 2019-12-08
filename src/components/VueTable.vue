@@ -17,9 +17,9 @@
             </thead>
             <tbody v-for="row in sortRows" v-bind:key="row.id">
                 <tr>
-                    <td v-for="key in fields" v-bind:key="key.id">
+                    <td @dblclick="edition" v-for="key in fields" v-bind:key="key.id">
                         <span> {{ row[key] }}</span>
-                        <input type="text" value="">
+                        <input @blur="blur" :class="{'edit-data': !isEdition}" type="text"  value="">
                     </td>
                 </tr>
             </tbody>
@@ -43,7 +43,8 @@ export default {
             rows: [],
             search: '',
             sortKey: '',
-            reverse: false
+            reverse: false,
+            isEdition: false
         }
     },
     methods: {
@@ -114,6 +115,13 @@ export default {
                 return el
             }
 
+        },
+        edition(event){
+            event.target.querySelector('input').classList.remove('edit-data')
+            event.target.querySelector('span').classList.add('edit-data')
+            },
+        blur(event){
+            window.console.log(event.target)
         }
     },
     mounted() {
@@ -145,6 +153,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
 <style scoped>
+.edit-data {display: none;}
 h3 {
     margin: 40px 0 0;
 }

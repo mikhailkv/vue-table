@@ -11,7 +11,8 @@
             @keyup.enter="row[key].isEdited=false"
             @keyup.esc="resetCell(row[key])" 
             type="text" 
-            v-model="row[key].value">
+            v-model="row[key].value"
+            ref="input">
     </td>
 </tr>
 </template>
@@ -21,7 +22,7 @@ export default {
     name: 'TableRow',
     props: {
         row: {
-            type: Array
+            type: Object
         },
         fields: {
             type: Array
@@ -33,18 +34,18 @@ export default {
         }
     },
     methods: {
-        editCell: function(cell){
+        editCell: async function(cell){
             this.cellData = cell.value
             cell.isEdited=true
+            await this.$nextTick()
+            this.$refs.input[0].focus()
+            
         },
         resetCell: function(cell){
             cell.isEdited=false
             return (this.cellData) ? cell.value=this.cellData: cell.value;
-
-        }
-            
+        }            
     }
-
 }
 </script>
 

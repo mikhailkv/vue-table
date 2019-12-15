@@ -26,6 +26,7 @@
 <script>
 import 'materialize-css/dist/css/materialize.css'
 import axios from 'axios'
+import _ from 'lodash';
 import TableRow from './TableRow.vue'
 
 export default {
@@ -119,6 +120,7 @@ export default {
         }
     },
     mounted() {
+        
         this.loading = true
         axios({
                 method: 'get',
@@ -129,6 +131,8 @@ export default {
                 this.loading = false
                 this.getRows(this.data)
                 this.getFields(this.rows[0])
+                window.console.log(_.find(this.data, function(o){return o.id.value > '100'}));
+
             })
 
     },

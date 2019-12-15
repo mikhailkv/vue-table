@@ -16,12 +16,7 @@
                 </tr>
             </thead>
             <tbody v-for="row in sortRows" v-bind:key="row.id">
-                <tr>
-                    <td @dblclick="edition" v-for="key in fields" v-bind:key="key.id">
-                        <span> {{ row[key] }}</span>
-                        <input @blur="blur" :class="{'edit-data': !isEdition}" type="text"  value="">
-                    </td>
-                </tr>
+                <TableRow :row="row" :fields="fields" />
             </tbody>
         </table>
     </div>
@@ -31,9 +26,13 @@
 <script>
 import 'materialize-css/dist/css/materialize.css'
 import axios from 'axios'
+import TableRow from './TableRow.vue'
 
 export default {
     name: 'VueTable',
+    components: {
+        TableRow
+    },
     data() {
 
         return {
@@ -44,7 +43,6 @@ export default {
             search: '',
             sortKey: '',
             reverse: false,
-            isEdition: false
         }
     },
     methods: {
@@ -75,7 +73,10 @@ export default {
                 if (Object.prototype.toString.call(value) === '[object Object]') {
                     this.getRow(value, row, key)
                 } else {
-                    row[key] = value
+                    let cellData = {}
+                    cellData['value'] = value
+                    cellData['isEdited'] = false
+                    row[key] = cellData
                 }
             }
             return
@@ -115,13 +116,6 @@ export default {
                 return el
             }
 
-        },
-        edition(event){
-            event.target.querySelector('input').classList.remove('edit-data')
-            event.target.querySelector('span').classList.add('edit-data')
-            },
-        blur(event){
-            window.console.log(event.target)
         }
     },
     mounted() {
@@ -153,7 +147,10 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
 <style scoped>
-.edit-data {display: none;}
+.edit-data {
+    display: none;
+}
+
 h3 {
     margin: 40px 0 0;
 }

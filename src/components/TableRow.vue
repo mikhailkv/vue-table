@@ -2,7 +2,7 @@
 <tr>
     <td 
         @dblclick="editCell(rowLocal[key])" 
-        v-for="key in fieldsLocal" v-bind:key="key.id"
+        v-for="key in fields" v-bind:key="key.id"
     >
         <span v-if="!rowLocal[key].isEdited"> {{ rowLocal[key].value }}</span>
         <input 
@@ -31,7 +31,7 @@ export default {
     data(){
         return{
             cellData: '',
-            rowLocal: this.util.extend({}, this.row),
+            rowLocal: {...this.row},
             fieldsLocal: [...this.fields]
         }
     },

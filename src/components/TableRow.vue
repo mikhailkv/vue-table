@@ -1,17 +1,17 @@
 <template >
 <tr>
     <td 
-        @dblclick="editCell(row[key])" 
-        v-for="key in fields" v-bind:key="key.id"
+        @dblclick="editCell(rowLocal[key])" 
+        v-for="key in fieldsLocal" v-bind:key="key.id"
     >
-        <span v-if="!row[key].isEdited"> {{ row[key].value }}</span>
+        <span v-if="!rowLocal[key].isEdited"> {{ rowLocal[key].value }}</span>
         <input 
             v-else 
-            @blur="row[key].isEdited=false"
-            @keyup.enter="row[key].isEdited=false"
-            @keyup.esc="resetCell(row[key])" 
+            @blur="rowLocal[key].isEdited=false"
+            @keyup.enter="rowLocal[key].isEdited=false"
+            @keyup.esc="resetCell(rowLocal[key])" 
             type="text" 
-            v-model="row[key].value"
+            v-model="rowLocal[key].value"
             ref="input">
     </td>
 </tr>
@@ -30,15 +30,20 @@ export default {
     },
     data(){
         return{
-            cellData: ''
+            cellData: '',
+            rowLocal: this.util.extend({}, this.row),
+            fieldsLocal: [...this.fields]
         }
     },
     methods: {
-        editCell: async function(cell){
+        editCell: function(cell){
             this.cellData = cell.value
             cell.isEdited=true
-            await this.$nextTick()
-            this.$refs.input[0].focus()
+            this.$nextTick(()=> {
+                if (this.$refs.input) {
+                    this.$refs.input[0].focus()
+                }
+            })
             
         },
         resetCell: function(cell){
